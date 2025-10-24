@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/dummy_weather_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/dummy_onehour_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/dummy_onehour_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13" />
+
+            <ImageView
+                android:id="@+id/dummy_dummy_onehour_wether"
+                android:layout_width="38dp"
+                android:layout_height="33dp"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/mark_tenki_hare" />
+
+            <TextView
+                android:id="@+id/dummy_dummy_onehour_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13℃"
+                android:textColor="#E43232" />
+
+            <TextView
+                android:id="@+id/dummy_dummy_onehour_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="14℃"
+                android:textColor="#3F51B5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dummy_twoweek_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/dummy_twoweek_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13日\n(月)" />
+
+            <ImageView
+                android:id="@+id/dummy_dummy_twoweek_wether"
+                android:layout_width="38dp"
+                android:layout_height="33dp"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/mark_tenki_hare" />
+
+            <TextView
+                android:id="@+id/dummy_dummy_twoweek_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="13℃"
+                android:textColor="#E43232" />
+
+            <TextView
+                android:id="@+id/dummy_dummy_twoweek_min"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="14℃"
+                android:textColor="#3F51B5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dummy_todaytomorrow_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/dummy_todaytomorrow_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="13日（金）"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/dummy_dummy_todaytomorrow_wether"
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/mark_tenki_hare" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="晴れのち曇り"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dummy_dummy_twoweek_max2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="13℃"
+                    android:textColor="#E43232"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/dummy_dummy_tomodaytomoorrow_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="14℃"
+                    android:textColor="#3F51B5"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
