@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,28 +12,67 @@ import android.widget.TextView;
 
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import snowsan0113.weather_app.android.MainActivity;
 import snowsan0113.weather_app.android.R;
+import snowsan0113.weather_app.android.api.OpenWeatherAPI;
 import snowsan0113.weather_app.android.fragment.WeatherFragment;
 
 public class LayoutManager {
 
+    //インスタンス
     private static LayoutManager instance;
     private Activity activity;
 
+    //定数
     public static final int MAX_TEMP_COLOR = Color.parseColor("#E43232");
     public static final int MIN_TEMP_COLOR = Color.parseColor("#3F51B5");
     public static final int BUTTON_ON_COLOR = Color.parseColor("#408EE9");
     public static final int BUTTON_OFF_COLOR = Color.parseColor("#c1c3cc");
 
+    //レイアウト
+    private List<WeatherLayout> todaytomorrow_layout_list = new ArrayList<>();
+    private List<WeatherLayout> onehour_layout_list = new ArrayList<>();
+    private List<WeatherLayout> twoweek_layout_list = new ArrayList<>();
+
     public LayoutManager(Activity activity) {
         this.activity = activity;
     }
 
+
+    public void setWeatherLayout(LinearLayout weatherLayout) {
+        setTodayTomorrowLayout(weatherLayout);
+
+        new Thread(() -> {
+            OpenWeatherAPI openWeatherAPI = OpenWeatherAPI.getInstance(activity);
+            for (OpenWeatherAPI.WeatherList weatherList : openWeatherAPI.getWeatherList()) {
+                List<OpenWeatherAPI.WeatherList.Weather> weather = weatherList.getWeather();
+                OpenWeatherAPI.WeatherList.Weather first_weather = weather.get(0);
+
+                activity.runOnUiThread(() -> {
+                    for (WeatherLayout todaytomorrow_layout : todaytomorrow_layout_list) {
+                        todaytomorrow_layout.getWeatherTextView().setText(first_weather.getDescription());
+                        if (first_weather.getDescription().contains("晴れ")) {
+                            todaytomorrow_layout.getWeatherIcon().setImageResource(R.drawable.mark_tenki_hare);
+                        }
+                        else if (first_weather.getDescription().contains("曇り")) {
+                            todaytomorrow_layout.getWeatherIcon().setImageResource(R.drawable.mark_tenki_kumori);
+                        }
+                        else if (first_weather.getDescription().contains("雨")) {
+                            todaytomorrow_layout.getWeatherIcon().setImageResource(R.drawable.mark_tenki_umbrella);
+                        }
+                    }
+                });
+            }
+        }).start();
+    }
+
     public void setTodayTomorrowLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
+        todaytomorrow_layout_list.clear();
 
         LocalDateTime localDateTime = LocalDateTime.now();
         for (int n = 0; n < 2; n++) {
@@ -101,11 +141,14 @@ public class LayoutManager {
 
             weather_layout.addView(linear);
             localDateTime = localDateTime.plusDays(1);
+
+            todaytomorrow_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, linear));
         }
     }
 
     public void setOnehourLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
+        onehour_layout_list.clear();
 
         LocalDateTime localDateTime = LocalDateTime.now();
         for (int n = 0; n < 24; n++) {
@@ -149,12 +192,14 @@ public class LayoutManager {
 
             weather_layout.addView(linear);
 
+            onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, linear));
             localDateTime = localDateTime.plusHours(1);
         }
     }
 
     public void setTwoWeekLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
+        twoweek_layout_list.clear();
 
         LocalDateTime localDateTime = LocalDateTime.now();
         for (int n = 0; n < 14; n++) {
@@ -198,6 +243,7 @@ public class LayoutManager {
 
             weather_layout.addView(linear);
 
+            twoweek_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, linear));
             localDateTime = localDateTime.plusDays(1);
         }
     }

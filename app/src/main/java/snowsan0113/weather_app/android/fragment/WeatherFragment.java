@@ -51,6 +51,6 @@ public class WeatherFragment extends Fragment {
         FragmentActivity activity = getActivity();
         MaterialButtonToggleGroup group = view.findViewById(R.id.weather_datebutton_group);
         group.addOnButtonCheckedListener(new WeatherDateButtonListener(activity));
-        LayoutManager.getInstance(activity).setOnehourLayout(view.findViewById(R.id.weather_scroll_layout));
+        LayoutManager.getInstance(activity).setWeatherLayout(view.findViewById(R.id.weather_scroll_layout));
     }
 }
