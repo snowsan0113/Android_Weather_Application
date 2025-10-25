@@ -18,9 +18,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButtonToggleGroup;
+
 import java.time.LocalDateTime;
 
 import snowsan0113.weather_app.android.R;
+import snowsan0113.weather_app.android.listener.WeatherDateButtonListener;
 import snowsan0113.weather_app.android.manager.LayoutManager;
 
 public class WeatherFragment extends Fragment {
@@ -46,7 +49,8 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         FragmentActivity activity = getActivity();
-        LinearLayout weather_layout = activity.findViewById(R.id.weather_scroll_layout);
-        LayoutManager.getInstance(activity).setTodayTomorrowLayout(weather_layout);
+        MaterialButtonToggleGroup group = view.findViewById(R.id.weather_datebutton_group);
+        group.addOnButtonCheckedListener(new WeatherDateButtonListener(activity));
+        LayoutManager.getInstance(activity).setOnehourLayout(view.findViewById(R.id.weather_scroll_layout));
     }
 }

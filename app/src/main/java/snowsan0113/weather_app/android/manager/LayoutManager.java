@@ -24,6 +24,8 @@ public class LayoutManager {
 
     public static final int MAX_TEMP_COLOR = Color.parseColor("#E43232");
     public static final int MIN_TEMP_COLOR = Color.parseColor("#3F51B5");
+    public static final int BUTTON_ON_COLOR = Color.parseColor("#408EE9");
+    public static final int BUTTON_OFF_COLOR = Color.parseColor("#c1c3cc");
 
     public LayoutManager(Activity activity) {
         this.activity = activity;
