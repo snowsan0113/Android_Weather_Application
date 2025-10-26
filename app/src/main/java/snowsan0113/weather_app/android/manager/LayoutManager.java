@@ -76,33 +76,88 @@ public class LayoutManager {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         for (int n = 0; n < 2; n++) {
-            //レイアウト
-            LinearLayout linear = new LinearLayout(activity);
-            LinearLayout.LayoutParams linear_param = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            linear.setLayoutParams(linear_param);
-            linear.setOrientation(LinearLayout.VERTICAL);
-            linear.setGravity(Gravity.CENTER);
+            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, localDateTime);
+            weather_layout.addView(linear);
+            localDateTime = localDateTime.plusDays(1);
 
-            //日付テキスト
-            TextView date_text = new TextView(activity);
-            date_text.setGravity(Gravity.CENTER);
-            date_text.setTextSize(16);
-            date_text.setText(localDateTime.getDayOfMonth() + "日(" + localDateTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.JAPAN) + ")");
+            todaytomorrow_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, linear));
+        }
+    }
 
-            //アイコン
-            ImageView weather_icon = new ImageView(activity);
-            LinearLayout.LayoutParams icon_param = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, activity.getResources().getDisplayMetrics())
-            );
-            icon_param.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, activity.getResources().getDisplayMetrics());
-            weather_icon.setLayoutParams(icon_param);
-            weather_icon.setImageResource(R.drawable.mark_tenki_hare);
+    public void setOnehourLayout(LinearLayout weather_layout) {
+        weather_layout.removeAllViews();
+        onehour_layout_list.clear();
 
-            //天気
+        LocalDateTime localDateTime = LocalDateTime.now();
+        for (int n = 0; n < 24; n++) {
+            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime);
+            weather_layout.addView(linear);
+
+            onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, linear));
+            localDateTime = localDateTime.plusHours(1);
+        }
+    }
+
+    public void setTwoWeekLayout(LinearLayout weather_layout) {
+        weather_layout.removeAllViews();
+        twoweek_layout_list.clear();
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        for (int n = 0; n < 14; n++) {
+            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, localDateTime);
+            weather_layout.addView(linear);
+
+            twoweek_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, linear));
+            localDateTime = localDateTime.plusDays(1);
+        }
+    }
+
+    public LinearLayout createWeatherLayout(WeatherLayout.WeatherLayoutType type, LocalDateTime localDateTime) {
+        //レイアウト
+        LinearLayout linear = new LinearLayout(activity);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        linear.setGravity(Gravity.CENTER);
+
+        TextView date_text = new TextView(activity);
+        date_text.setGravity(Gravity.CENTER);
+        date_text.setTextSize(16);
+
+        if (type == WeatherLayout.WeatherLayoutType.FEW_HOUR) {
+            date_text.setText(String.valueOf(localDateTime.getHour()));
+        }
+        else if (type == WeatherLayout.WeatherLayoutType.TWO_WEEK || type == WeatherLayout.WeatherLayoutType.TODAY_TOMORROW) {
+            date_text.setText(localDateTime.getDayOfMonth() + "日\n(" + localDateTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.JAPAN) + ")");
+        }
+        linear.addView(date_text);
+
+        //アイコン
+        ImageView weather_icon = new ImageView(activity);
+        LinearLayout.LayoutParams icon_param = new LinearLayout.LayoutParams(
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, activity.getResources().getDisplayMetrics()),
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, activity.getResources().getDisplayMetrics())
+        );
+        icon_param.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, activity.getResources().getDisplayMetrics());
+        weather_icon.setLayoutParams(icon_param);
+        weather_icon.setImageResource(R.drawable.mark_tenki_hare);
+        linear.addView(weather_icon);
+
+        if (type == WeatherLayout.WeatherLayoutType.FEW_HOUR || type == WeatherLayout.WeatherLayoutType.TWO_WEEK) {
+            //最高気温
+            TextView max_text = new TextView(activity);
+            max_text.setText("14℃");
+            max_text.setTextColor(MAX_TEMP_COLOR);
+            max_text.setGravity(Gravity.CENTER);
+
+            //最低気温
+            TextView min_text = new TextView(activity);
+            min_text.setText("10℃");
+            min_text.setTextColor(MIN_TEMP_COLOR);
+            min_text.setGravity(Gravity.CENTER);
+
+            linear.addView(max_text);
+            linear.addView(min_text);
+        }
+        else if (type == WeatherLayout.WeatherLayoutType.TODAY_TOMORROW) {
             TextView weather_text = new TextView(activity);
             LinearLayout.LayoutParams weathertext_param = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -111,6 +166,7 @@ public class LayoutManager {
             weather_text.setLayoutParams(weathertext_param);
             weather_text.setText("晴れのち曇り");
             weather_text.setTextSize(16);
+            linear.addView(weather_text);
 
             //最低最高
             LinearLayout weather_info_layout = new LinearLayout(activity);
@@ -134,118 +190,10 @@ public class LayoutManager {
             weather_info_layout.addView(max_temp_text);
             weather_info_layout.addView(min_temp_text);
 
-            linear.addView(date_text);
-            linear.addView(weather_icon);
-            linear.addView(weather_text);
             linear.addView(weather_info_layout);
-
-            weather_layout.addView(linear);
-            localDateTime = localDateTime.plusDays(1);
-
-            todaytomorrow_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, linear));
         }
-    }
 
-    public void setOnehourLayout(LinearLayout weather_layout) {
-        weather_layout.removeAllViews();
-        onehour_layout_list.clear();
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        for (int n = 0; n < 24; n++) {
-            //レイアウト
-            LinearLayout linear = new LinearLayout(activity);
-            linear.setOrientation(LinearLayout.VERTICAL);
-            linear.setGravity(Gravity.CENTER);
-
-            //時間表示
-            TextView hour_text = new TextView(activity);
-            hour_text.setGravity(Gravity.CENTER);
-            hour_text.setText(String.valueOf(localDateTime.getHour()));
-
-            //天気アイコン
-            ImageView imageView = new ImageView(activity);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, activity.getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, activity.getResources().getDisplayMetrics())
-            );
-            imgParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, activity.getResources().getDisplayMetrics());
-            imageView.setLayoutParams(imgParams);
-            imageView.setImageResource(R.drawable.mark_tenki_hare);
-
-            //最高気温
-            TextView max_text = new TextView(activity);
-            max_text.setText("xx℃");
-            max_text.setTextColor(MAX_TEMP_COLOR);
-            max_text.setGravity(Gravity.CENTER);
-
-            //最低気温
-            TextView min_text = new TextView(activity);
-            min_text.setText("xx℃");
-            min_text.setTextColor(MIN_TEMP_COLOR);
-            min_text.setGravity(Gravity.CENTER);
-
-            //レイアウト追加する
-            linear.addView(hour_text);
-            linear.addView(imageView);
-            linear.addView(max_text);
-            linear.addView(min_text);
-
-            weather_layout.addView(linear);
-
-            onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, linear));
-            localDateTime = localDateTime.plusHours(1);
-        }
-    }
-
-    public void setTwoWeekLayout(LinearLayout weather_layout) {
-        weather_layout.removeAllViews();
-        twoweek_layout_list.clear();
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        for (int n = 0; n < 14; n++) {
-            //レイアウト
-            LinearLayout linear = new LinearLayout(activity);
-            linear.setOrientation(LinearLayout.VERTICAL);
-            linear.setGravity(Gravity.CENTER);
-
-            //日付表示
-            TextView hour_text = new TextView(activity);
-            hour_text.setGravity(Gravity.CENTER);
-            hour_text.setText(localDateTime.getDayOfMonth() + "日\n(" + localDateTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.JAPAN) + ")");
-
-            //天気アイコン
-            ImageView imageView = new ImageView(activity);
-            LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 38, activity.getResources().getDisplayMetrics()),
-                    (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, activity.getResources().getDisplayMetrics())
-            );
-            imgParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, activity.getResources().getDisplayMetrics());
-            imageView.setLayoutParams(imgParams);
-            imageView.setImageResource(R.drawable.mark_tenki_hare);
-
-            //最高気温
-            TextView max_text = new TextView(activity);
-            max_text.setText("14℃");
-            max_text.setTextColor(MAX_TEMP_COLOR);
-            max_text.setGravity(Gravity.CENTER);
-
-            //最低気温
-            TextView min_text = new TextView(activity);
-            min_text.setText("10℃");
-            min_text.setTextColor(MIN_TEMP_COLOR);
-            min_text.setGravity(Gravity.CENTER);
-
-            //レイアウト追加する
-            linear.addView(hour_text);
-            linear.addView(imageView);
-            linear.addView(max_text);
-            linear.addView(min_text);
-
-            weather_layout.addView(linear);
-
-            twoweek_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, linear));
-            localDateTime = localDateTime.plusDays(1);
-        }
+        return linear;
     }
 
     public static LayoutManager getInstance(Activity activity) {
