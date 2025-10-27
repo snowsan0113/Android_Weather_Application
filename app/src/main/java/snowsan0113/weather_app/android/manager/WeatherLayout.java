@@ -22,9 +22,10 @@ public class WeatherLayout {
     private TextView max_temp_textview;
     private TextView min_temp_textview;
 
-    public WeatherLayout(WeatherLayoutType type, LinearLayout linearLayout) {
+    public WeatherLayout(WeatherLayoutType type, LocalDateTime localDateTime, LinearLayout linearLayout) {
         this.root_layout = linearLayout;
         this.type = type;
+        this.localDateTime = localDateTime;
 
         //共通
         this.date_textview = (TextView) linearLayout.getChildAt(0);
