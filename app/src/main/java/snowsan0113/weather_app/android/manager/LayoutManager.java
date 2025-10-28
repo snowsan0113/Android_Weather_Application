@@ -7,6 +7,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -84,42 +85,60 @@ public class LayoutManager {
 
     public void setTodayTomorrowLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
-        todaytomorrow_layout_list.clear();
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        for (int n = 0; n < 2; n++) {
-            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, localDateTime);
-            weather_layout.addView(linear);
-            todaytomorrow_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, localDateTime, linear));
-            localDateTime = localDateTime.plusDays(1);
+        if (!todaytomorrow_layout_list.isEmpty()) {
+            for (WeatherLayout todaytomorrow : todaytomorrow_layout_list) {
+                LinearLayout linear = todaytomorrow.getRootLayout();
+                weather_layout.addView(linear);
+            }
+        }
+        else {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            for (int n = 0; n < 2; n++) {
+                LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, localDateTime);
+                weather_layout.addView(linear);
+                todaytomorrow_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TODAY_TOMORROW, localDateTime, linear));
+                localDateTime = localDateTime.plusDays(1);
+            }
         }
     }
 
     public void setOnehourLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
-        onehour_layout_list.clear();
+        if (!onehour_layout_list.isEmpty()) {
+            for (WeatherLayout todaytomorrow : onehour_layout_list) {
+                LinearLayout linear = todaytomorrow.getRootLayout();
+                weather_layout.addView(linear);
+            }
+        }
+        else {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            for (int n = 0; n < 24; n++) {
+                LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime);
+                weather_layout.addView(linear);
 
-        LocalDateTime localDateTime = LocalDateTime.now();
-        for (int n = 0; n < 24; n++) {
-            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime);
-            weather_layout.addView(linear);
-
-            onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime, linear));
-            localDateTime = localDateTime.plusHours(1);
+                onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime, linear));
+                localDateTime = localDateTime.plusHours(1);
+            }
         }
     }
 
     public void setTwoWeekLayout(LinearLayout weather_layout) {
         weather_layout.removeAllViews();
-        twoweek_layout_list.clear();
+        if (!twoweek_layout_list.isEmpty()) {
+            for (WeatherLayout todaytomorrow : twoweek_layout_list) {
+                LinearLayout linear = todaytomorrow.getRootLayout();
+                weather_layout.addView(linear);
+            }
+        }
+        else {
+            LocalDateTime localDateTime = LocalDateTime.now();
+            for (int n = 0; n < 14; n++) {
+                LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, localDateTime);
+                weather_layout.addView(linear);
 
-        LocalDateTime localDateTime = LocalDateTime.now();
-        for (int n = 0; n < 14; n++) {
-            LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, localDateTime);
-            weather_layout.addView(linear);
-
-            twoweek_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, localDateTime, linear));
-            localDateTime = localDateTime.plusDays(1);
+                twoweek_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.TWO_WEEK, localDateTime, linear));
+                localDateTime = localDateTime.plusDays(1);
+            }
         }
     }
 
