@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.play.services.location)
     implementation("com.google.code.gson:gson:2.7")
     implementation(libs.appcompat)
     implementation(libs.material)

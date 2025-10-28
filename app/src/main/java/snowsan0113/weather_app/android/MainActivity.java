@@ -15,6 +15,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.tabs.TabLayout;
+
+import snowsan0113.weather_app.android.listener.TabClickListener;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
