@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.time.LocalDateTime;
 
 import snowsan0113.weather_app.android.R;
+import snowsan0113.weather_app.android.listener.BottomButtonClickListener;
 import snowsan0113.weather_app.android.listener.TabClickListener;
 import snowsan0113.weather_app.android.listener.WeatherDateButtonListener;
 import snowsan0113.weather_app.android.manager.LayoutManager;
@@ -57,5 +59,7 @@ public class WeatherFragment extends Fragment {
         LayoutManager.getInstance(activity).setWeatherLayout(view.findViewById(R.id.weather_scroll_layout));
         TabLayout tab = view.findViewById(R.id.tabLayout);
         tab.addOnTabSelectedListener(new TabClickListener(activity));
+        MaterialButtonToggleGroup button = view.findViewById(R.id.bottom_button_group);
+        button.addOnButtonCheckedListener(new BottomButtonClickListener(activity));
     }
 }
