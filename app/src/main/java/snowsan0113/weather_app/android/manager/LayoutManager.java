@@ -21,7 +21,6 @@ import java.util.Locale;
 import snowsan0113.weather_app.android.MainActivity;
 import snowsan0113.weather_app.android.R;
 import snowsan0113.weather_app.android.api.OpenWeatherAPI;
-import snowsan0113.weather_app.android.fragment.WeatherFragment;
 
 public class LayoutManager {
 

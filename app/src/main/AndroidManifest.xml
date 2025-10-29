@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Android_Weather_Application"
         tools:targetApi="31">
         <activity
+            android:name=".activity.WeatherHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.WeatherSearchActivity"
             android:exported="false"
             android:label="@string/title_activity_weather_search"
@@ -26,6 +29,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
