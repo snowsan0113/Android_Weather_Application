@@ -39,7 +39,7 @@ public class OpenWeatherAPI {
         String key = sharedPref.getString("openweather_apikey", null);
 
         try {
-            JsonObject raw_json = Utility.getRawJson("https://api.openweathermap.org/data/2.5/forecast?lat=" + 35.652799 + "&lon=" + 139.745367 + "&appid=" + "" + "&lang=ja");
+            JsonObject raw_json = Utility.getRawJson("https://api.openweathermap.org/data/2.5/forecast?lat=" + 26.13 + "&lon=" + 127.41 + "&appid=" + "" + "&lang=ja");
             return new Gson().fromJson(raw_json, OpenWeatherAPI.class);
         } catch (IOException e) {
 
@@ -82,7 +82,7 @@ public class OpenWeatherAPI {
 
         @SuppressLint("SimpleDateFormat")
         public LocalDateTime getLocalDateTime() {
-            SimpleDateFormat raw_format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat raw_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 Date date = raw_format.parse(dt_txt);
                 return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());

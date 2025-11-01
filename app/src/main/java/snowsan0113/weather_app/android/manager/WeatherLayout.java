@@ -48,6 +48,10 @@ public class WeatherLayout {
         return localDateTime;
     }
 
+    public void setWeatherTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
     public WeatherLayoutType getType() {
         return type;
     }

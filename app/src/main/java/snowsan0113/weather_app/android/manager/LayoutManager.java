@@ -5,20 +5,18 @@ import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import snowsan0113.weather_app.android.MainActivity;
 import snowsan0113.weather_app.android.R;
 import snowsan0113.weather_app.android.api.OpenWeatherAPI;
 
@@ -36,7 +34,7 @@ public class LayoutManager {
 
     //レイアウト
     private List<WeatherLayout> todaytomorrow_layout_list = new ArrayList<>();
-    private List<WeatherLayout> onehour_layout_list = new ArrayList<>();
+    private List<WeatherLayout> fewhour_layout_list = new ArrayList<>();
     private List<WeatherLayout> twoweek_layout_list = new ArrayList<>();
 
     public LayoutManager(Activity activity) {
@@ -46,7 +44,7 @@ public class LayoutManager {
 
     public void setWeatherLayout(LinearLayout weatherLayout) {
         setTodayTomorrowLayout(weatherLayout);
-
+        setFewHourLayout(weatherLayout, 3);
 
         new Thread(() -> {
             OpenWeatherAPI openWeatherAPI = OpenWeatherAPI.getInstance(activity);
@@ -57,8 +55,8 @@ public class LayoutManager {
                 activity.runOnUiThread(() -> {
                     for (WeatherLayout todaytomorrow_layout : todaytomorrow_layout_list) {
                         if (todaytomorrow_layout.getWeatherTime().toLocalDate().equals(weatherList.getLocalDateTime().toLocalDate())) {
-                            Log.d("a", weatherList.getLocalDateTime().toString() + "," + first_weather.getDescription() + ":" + weatherList.getMain().getTempMax(true));
-                            Log.d("i", todaytomorrow_layout.getWeatherTime().toString());
+                            //Log.d("a", weatherList.getLocalDateTime().toString() + "," + first_weather.getDescription() + ":" + weatherList.getMain().getTempMax(true));
+                            //Log.d("i", todaytomorrow_layout.getWeatherTime().toString());
 
                             todaytomorrow_layout.getWeatherTextView().setText(first_weather.getDescription());
                             todaytomorrow_layout.getMaxTempTextView().setText(weatherList.getMain().getTempMax(false) + "℃");
@@ -76,6 +74,33 @@ public class LayoutManager {
                                 icon.setImageResource(R.drawable.mark_tenki_umbrella);
                             }
                         }
+                    }
+
+                    for (WeatherLayout fewhour_layout : fewhour_layout_list) {
+                        LocalDateTime layout_weather_time = fewhour_layout.getWeatherTime();
+                        LocalDateTime api_weather_time = weatherList.getLocalDateTime();
+                        int diff_hour = Math.abs(api_weather_time.getHour() - layout_weather_time.getHour());
+                        int sub_hour = Math.min(diff_hour, 24 - diff_hour);
+
+                        Log.d("fewlayout", api_weather_time.toString());
+                        if (sub_hour <= 1) {
+                            fewhour_layout.getMaxTempTextView().setText(String.valueOf(((int) weatherList.getMain().getTempMax(false)) + "℃"));
+                            fewhour_layout.getMinTempTextView().setText(String.valueOf(((int) weatherList.getMain().getTempMin(false)) + "℃"));
+
+                            ImageView icon = fewhour_layout.getWeatherIcon();
+                            icon.setImageDrawable(null);
+                            if (first_weather.getDescription().contains("晴")) {
+                                icon.setImageResource(R.drawable.mark_tenki_hare);
+                            }
+                            else if (first_weather.getDescription().contains("曇") || first_weather.getDescription().contains("雲")) {
+                                icon.setImageResource(R.drawable.mark_tenki_kumori);
+                            }
+                            else if (first_weather.getDescription().contains("雨")) {
+                                icon.setImageResource(R.drawable.mark_tenki_umbrella);
+                            }
+                            fewhour_layout.getDateTextView().setText(String.valueOf(api_weather_time.getHour()));
+                        }
+
                     }
                 });
             }
@@ -106,19 +131,20 @@ public class LayoutManager {
         if (get_hour < 1) get_hour = 0;
 
         weather_layout.removeAllViews();
-        if (!onehour_layout_list.isEmpty()) {
-            for (WeatherLayout todaytomorrow : onehour_layout_list) {
+        if (!fewhour_layout_list.isEmpty()) {
+            for (WeatherLayout todaytomorrow : fewhour_layout_list) {
                 LinearLayout linear = todaytomorrow.getRootLayout();
                 weather_layout.addView(linear);
             }
         }
         else {
             LocalDateTime localDateTime = LocalDateTime.now();
-            for (int n = 0; n < 24; n+=get_hour) {
+            for (int n = 0; n <= 24; n+=get_hour) {
+                Log.d("a", localDateTime.getHour() + ":" + n);
                 LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime);
                 weather_layout.addView(linear);
 
-                onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime, linear));
+                fewhour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime, linear));
                 localDateTime = localDateTime.plusHours(get_hour);
             }
         }
