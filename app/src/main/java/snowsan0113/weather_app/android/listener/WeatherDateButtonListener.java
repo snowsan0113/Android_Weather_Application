@@ -31,7 +31,7 @@ public class WeatherDateButtonListener implements MaterialButtonToggleGroup.OnBu
             button.setBackgroundColor(LayoutManager.BUTTON_ON_COLOR);
 
             if (checkedId == R.id.one_hour_button) {
-                layoutManager.setOnehourLayout(weather_layout);
+                layoutManager.setFewHourLayout(weather_layout, 3);
             }
             else if (checkedId == R.id.today_tomorrow_button) {
                 layoutManager.setTodayTomorrowLayout(weather_layout);

@@ -101,7 +101,10 @@ public class LayoutManager {
         }
     }
 
-    public void setOnehourLayout(LinearLayout weather_layout) {
+
+    public void setFewHourLayout(LinearLayout weather_layout, int get_hour) {
+        if (get_hour < 1) get_hour = 0;
+
         weather_layout.removeAllViews();
         if (!onehour_layout_list.isEmpty()) {
             for (WeatherLayout todaytomorrow : onehour_layout_list) {
@@ -111,12 +114,12 @@ public class LayoutManager {
         }
         else {
             LocalDateTime localDateTime = LocalDateTime.now();
-            for (int n = 0; n < 24; n++) {
+            for (int n = 0; n < 24; n+=get_hour) {
                 LinearLayout linear = createWeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime);
                 weather_layout.addView(linear);
 
                 onehour_layout_list.add(new WeatherLayout(WeatherLayout.WeatherLayoutType.FEW_HOUR, localDateTime, linear));
-                localDateTime = localDateTime.plusHours(1);
+                localDateTime = localDateTime.plusHours(get_hour);
             }
         }
     }
