@@ -1,6 +1,7 @@
 package snowsan0113.weather_app.android.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,5 +38,12 @@ public class WeatherHomeActivity extends AppCompatActivity {
         tab.addOnTabSelectedListener(new TabClickListener(this));
         MaterialButtonToggleGroup button = findViewById(R.id.bottom_button_group);
         button.addOnButtonCheckedListener(new BottomButtonClickListener(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("aa", "resume");
+        LayoutManager.getInstance(this).updateTab();
     }
 }

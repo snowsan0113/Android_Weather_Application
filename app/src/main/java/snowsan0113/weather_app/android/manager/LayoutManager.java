@@ -2,6 +2,7 @@ package snowsan0113.weather_app.android.manager;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.location.Address;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -10,12 +11,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import snowsan0113.weather_app.android.R;
 import snowsan0113.weather_app.android.api.OpenWeatherAPI;
@@ -36,6 +44,7 @@ public class LayoutManager {
     private List<WeatherLayout> todaytomorrow_layout_list = new ArrayList<>();
     private List<WeatherLayout> fewhour_layout_list = new ArrayList<>();
     private List<WeatherLayout> twoweek_layout_list = new ArrayList<>();
+    public static Map<MaterialButton, Address> search_button = new HashMap<>();
 
     public LayoutManager(Activity activity) {
         this.activity = activity;
@@ -252,6 +261,23 @@ public class LayoutManager {
         }
 
         return linear;
+    }
+
+    public void updateTab() {
+        JsonManager json = new JsonManager(activity, JsonManager.FileType.CONFIG);
+        JsonObject root_obj = json.getRawElement().getAsJsonObject();
+        JsonObject loc_obj = root_obj.getAsJsonObject("weather_location");
+        TabLayout tabLayout = activity.findViewById(R.id.tabLayout);
+        for (Map.Entry<String, JsonElement> entry : loc_obj.entrySet()) {
+            String key = entry.getKey();
+            JsonElement value = entry.getValue();
+            for (int n = 1; n < tabLayout.getTabCount(); n++) {
+                tabLayout.removeTabAt(n);
+            }
+            TabLayout.Tab tab = tabLayout.newTab();
+            tab.setText(key);
+            tabLayout.addTab(tab);
+        }
     }
 
     public static LayoutManager getInstance(Activity activity) {
